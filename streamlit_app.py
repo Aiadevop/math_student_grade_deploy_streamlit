@@ -146,9 +146,20 @@ def cargar_modelo():
                         # Intentar con diferentes protocolos de pickle
                         try:
                             modelo = pickle.load(f)
-                        except:
-                            f.seek(0)
-                            modelo = pickle.load(f, encoding='latin1')
+                        except Exception as pickle_error:
+                            st.warning(f"⚠️ Primer intento de pickle falló: {str(pickle_error)}")
+                            try:
+                                f.seek(0)
+                                modelo = pickle.load(f, encoding='latin1')
+                            except Exception as pickle_error2:
+                                st.warning(f"⚠️ Segundo intento de pickle falló: {str(pickle_error2)}")
+                                # Intentar con protocolo más antiguo
+                                try:
+                                    f.seek(0)
+                                    modelo = pickle.load(f, fix_imports=True, encoding='latin1')
+                                except Exception as pickle_error3:
+                                    st.error(f"❌ Todos los intentos de pickle fallaron: {str(pickle_error3)}")
+                                    raise pickle_error3
                     ruta_modelo = ruta
                     st.success(f"✅ Modelo cargado exitosamente con pickle desde: {ruta}")
                     st.info(f"📊 Tipo de modelo: {type(modelo).__name__}")
@@ -159,6 +170,9 @@ def cargar_modelo():
         
         if modelo is None:
             st.error("❌ No se pudo cargar el modelo desde ninguna ubicación")
+            st.warning("⚠️ Esto puede deberse a incompatibilidad de versiones entre numpy/scikit-learn")
+            st.info("💡 Solución: El modelo fue guardado con una versión diferente de numpy")
+            st.info("🔧 Intenta usar versiones más antiguas: numpy==1.21.6, scikit-learn==1.0.2")
             return None, None
         
     except Exception as e:
@@ -261,6 +275,20 @@ def main():
     st.sidebar.info("✅ packages.txt")
     st.sidebar.info("✅ runtime.txt")
     st.sidebar.info("✅ .streamlit/config.toml")
+    
+    # Información de versiones
+    st.sidebar.header("📦 Versiones")
+    try:
+        import numpy as np
+        st.sidebar.info(f"numpy: {np.__version__}")
+    except:
+        st.sidebar.error("numpy: No disponible")
+    
+    try:
+        import sklearn
+        st.sidebar.info(f"scikit-learn: {sklearn.__version__}")
+    except:
+        st.sidebar.error("scikit-learn: No disponible")
     
     # Título principal
     st.markdown('<h1 class="main-header">📊 Predicción de Calificaciones Matemáticas</h1>', unsafe_allow_html=True)
