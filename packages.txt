@@ -1,2 +1,7 @@
 python3-dev
 build-essential
+gcc
+g++
+libblas-dev
+liblapack-dev
+libatlas-base-dev

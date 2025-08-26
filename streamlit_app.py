@@ -28,8 +28,20 @@ try:
     st.success(f"✅ scikit-learn disponible - versión: {sklearn.__version__}")
 except ImportError:
     SKLEARN_AVAILABLE = False
-    st.error("❌ scikit-learn no está disponible. Por favor, instala scikit-learn: pip install scikit-learn")
-    st.info("🔧 En Streamlit Cloud, esto puede indicar un problema con la instalación de dependencias")
+    st.error("❌ scikit-learn no está disponible.")
+    st.error("🔧 Problema de instalación en Streamlit Cloud")
+    st.info("💡 Soluciones:")
+    st.info("1. Verifica que requirements.txt esté en la raíz del proyecto")
+    st.info("2. Asegúrate de que la versión de Python sea 3.9+")
+    st.info("3. Revisa los logs de deployment en Streamlit Cloud")
+    
+    # Mostrar información de depuración
+    st.subheader("🔍 Información de Depuración")
+    st.code("""
+    # Comandos para verificar en Streamlit Cloud:
+    pip list | grep scikit-learn
+    python -c "import sklearn; print(sklearn.__version__)"
+    """)
 
 # Configuración de la página
 st.set_page_config(
@@ -241,6 +253,14 @@ def main():
     st.sidebar.header("🔧 Información de Depuración")
     st.sidebar.info(f"📦 scikit-learn: {SKLEARN_AVAILABLE}")
     st.sidebar.info(f"📦 joblib: {JOBLIB_AVAILABLE}")
+    
+    # Información adicional para Streamlit Cloud
+    st.sidebar.header("☁️ Streamlit Cloud Info")
+    st.sidebar.info("📁 Archivos de configuración:")
+    st.sidebar.info("✅ requirements.txt")
+    st.sidebar.info("✅ packages.txt")
+    st.sidebar.info("✅ runtime.txt")
+    st.sidebar.info("✅ .streamlit/config.toml")
     
     # Título principal
     st.markdown('<h1 class="main-header">📊 Predicción de Calificaciones Matemáticas</h1>', unsafe_allow_html=True)
