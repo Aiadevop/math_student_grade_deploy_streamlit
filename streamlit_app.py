@@ -25,23 +25,23 @@ except ImportError:
 try:
     import sklearn
     SKLEARN_AVAILABLE = True
-    st.success(f"✅ scikit-learn disponible - versión: {sklearn.__version__}")
+    # st.success(f"✅ scikit-learn disponible - versión: {sklearn.__version__}")
 except ImportError:
     SKLEARN_AVAILABLE = False
-    st.error("❌ scikit-learn no está disponible.")
-    st.error("🔧 Problema de instalación en Streamlit Cloud")
-    st.info("💡 Soluciones:")
-    st.info("1. Verifica que requirements.txt esté en la raíz del proyecto")
-    st.info("2. Asegúrate de que la versión de Python sea 3.9+")
-    st.info("3. Revisa los logs de deployment en Streamlit Cloud")
+    # st.error("❌ scikit-learn no está disponible.")
+    # st.error("🔧 Problema de instalación en Streamlit Cloud")
+    # st.info("💡 Soluciones:")
+    # st.info("1. Verifica que requirements.txt esté en la raíz del proyecto")
+    # st.info("2. Asegúrate de que la versión de Python sea 3.9+")
+    # st.info("3. Revisa los logs de deployment en Streamlit Cloud")
     
     # Mostrar información de depuración
-    st.subheader("🔍 Información de Depuración")
-    st.code("""
+    # st.subheader("🔍 Información de Depuración")
+    # st.code("""
     # Comandos para verificar en Streamlit Cloud:
-    pip list | grep scikit-learn
-    python -c "import sklearn; print(sklearn.__version__)"
-    """)
+    # pip list | grep scikit-learn
+    # python -c "import sklearn; print(sklearn.__version__)"
+    # """)
 
 # Configuración de la página
 st.set_page_config(
@@ -62,21 +62,21 @@ st.markdown("""
         font-weight: bold;
     }
     .prediction-box {
-        background-color: #f0f2f6;
+        background-color: #1F77AA;
         padding: 1.5rem;
         border-radius: 10px;
         border-left: 5px solid #1f77b4;
         margin: 1rem 0;
     }
     .metric-container {
-        background-color: white;
+        background-color: #1F77AA;
         padding: 1rem;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         margin: 0.5rem 0;
     }
     .form-container {
-        background-color: white;
+        background-color: #1F77AA;
         padding: 2rem;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -126,20 +126,16 @@ def cargar_modelo():
         
         for ruta in posibles_rutas:
             if Path(ruta).exists():
-                st.info(f"🔍 Intentando cargar modelo desde: {ruta}")
-                st.info(f"📦 scikit-learn disponible: {SKLEARN_AVAILABLE}")
-                st.info(f"📦 joblib disponible: {JOBLIB_AVAILABLE}")
                 try:
                     # Intentar primero con joblib si está disponible
                     if JOBLIB_AVAILABLE:
                         try:
                             modelo = joblib_load(ruta)
                             ruta_modelo = ruta
-                            st.success(f"✅ Modelo cargado exitosamente con joblib desde: {ruta}")
-                            st.info(f"📊 Tipo de modelo: {type(modelo).__name__}")
                             return modelo, ruta_modelo
                         except Exception as joblib_error:
-                            st.warning(f"⚠️ joblib falló, intentando pickle: {str(joblib_error)}")
+                            # st.warning(f"⚠️ joblib falló, intentando pickle: {str(joblib_error)}")
+                            pass
                     
                     # Si joblib no funciona, intentar con pickle
                     with open(ruta, 'rb') as f:
@@ -147,37 +143,33 @@ def cargar_modelo():
                         try:
                             modelo = pickle.load(f)
                         except Exception as pickle_error:
-                            st.warning(f"⚠️ Primer intento de pickle falló: {str(pickle_error)}")
                             try:
                                 f.seek(0)
                                 modelo = pickle.load(f, encoding='latin1')
                             except Exception as pickle_error2:
-                                st.warning(f"⚠️ Segundo intento de pickle falló: {str(pickle_error2)}")
                                 # Intentar con protocolo más antiguo
                                 try:
                                     f.seek(0)
                                     modelo = pickle.load(f, fix_imports=True, encoding='latin1')
                                 except Exception as pickle_error3:
-                                    st.error(f"❌ Todos los intentos de pickle fallaron: {str(pickle_error3)}")
                                     raise pickle_error3
+                    
                     ruta_modelo = ruta
-                    st.success(f"✅ Modelo cargado exitosamente con pickle desde: {ruta}")
-                    st.info(f"📊 Tipo de modelo: {type(modelo).__name__}")
                     return modelo, ruta_modelo
+                    
                 except Exception as load_error:
-                    st.warning(f"⚠️ Error al cargar desde {ruta}: {str(load_error)}")
                     continue
         
         if modelo is None:
-            st.error("❌ No se pudo cargar el modelo desde ninguna ubicación")
-            st.warning("⚠️ Esto puede deberse a incompatibilidad de versiones entre numpy/scikit-learn")
-            st.info("💡 Solución: El modelo fue guardado con una versión diferente de numpy")
-            st.info("🔧 Intenta usar versiones más antiguas: numpy==1.21.6, scikit-learn==1.0.2")
+            # st.error("❌ No se pudo cargar el modelo desde ninguna ubicación")
+            # st.warning("⚠️ Esto puede deberse a incompatibilidad de versiones entre numpy/scikit-learn")
+            # st.info("💡 Solución: El modelo fue guardado con una versión diferente de numpy")
+            # st.info("🔧 Intenta usar versiones más antiguas: numpy==1.21.6, scikit-learn==1.0.2")
             return None, None
         
     except Exception as e:
-        st.error(f"❌ Error al cargar el modelo: {str(e)}")
-        st.info(f"🔧 Sugerencia: Verifica que el modelo se guardó correctamente con pickle")
+        # st.error(f"❌ Error al cargar el modelo: {str(e)}")
+        # st.info(f"🔧 Sugerencia: Verifica que el modelo se guardó correctamente con pickle")
         return None, None
 
 def validar_datos_formulario(datos):
@@ -263,32 +255,31 @@ def main():
     """
     Función principal de la aplicación Streamlit
     """
-    # Información de depuración
-    st.sidebar.header("🔧 Información de Depuración")
-    st.sidebar.info(f"📦 scikit-learn: {SKLEARN_AVAILABLE}")
-    st.sidebar.info(f"📦 joblib: {JOBLIB_AVAILABLE}")
+    # Información de depuración (comentada para producción)
+    # st.sidebar.header("🔧 Información de Depuración")
+    # st.sidebar.info(f"📦 scikit-learn: {SKLEARN_AVAILABLE}")
+    # st.sidebar.info(f"📦 joblib: {JOBLIB_AVAILABLE}")
     
-    # Información adicional para Streamlit Cloud
-    st.sidebar.header("☁️ Streamlit Cloud Info")
-    st.sidebar.info("📁 Archivos de configuración:")
-    st.sidebar.info("✅ requirements.txt")
-    st.sidebar.info("✅ packages.txt")
-    st.sidebar.info("✅ runtime.txt")
-    st.sidebar.info("✅ .streamlit/config.toml")
+    # Información adicional para Streamlit Cloud (comentada para producción)
+    # st.sidebar.header("☁️ Streamlit Cloud Info")
+    # st.sidebar.info("📁 Archivos de configuración:")
+    # st.sidebar.info("✅ requirements.txt")
+    # st.sidebar.info("✅ runtime.txt")
+    # st.sidebar.info("✅ .streamlit/config.toml")
     
-    # Información de versiones
-    st.sidebar.header("📦 Versiones")
-    try:
-        import numpy as np
-        st.sidebar.info(f"numpy: {np.__version__}")
-    except:
-        st.sidebar.error("numpy: No disponible")
+    # Información de versiones (comentada para producción)
+    # st.sidebar.header("📦 Versiones")
+    # try:
+    #     import numpy as np
+    #     st.sidebar.info(f"numpy: {np.__version__}")
+    # except:
+    #     st.sidebar.error("numpy: No disponible")
     
-    try:
-        import sklearn
-        st.sidebar.info(f"scikit-learn: {sklearn.__version__}")
-    except:
-        st.sidebar.error("scikit-learn: No disponible")
+    # try:
+    #     import sklearn
+    #     st.sidebar.info(f"scikit-learn: {sklearn.__version__}")
+    # except:
+    #     st.sidebar.error("scikit-learn: No disponible")
     
     # Título principal
     st.markdown('<h1 class="main-header">📊 Predicción de Calificaciones Matemáticas</h1>', unsafe_allow_html=True)
