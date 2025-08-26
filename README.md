@@ -2,6 +2,12 @@
 
 Esta es la versión Streamlit de la aplicación de predicción de calificaciones matemáticas. Streamlit ofrece una interfaz web moderna y fácil de usar para aplicaciones de machine learning.
 
+## 🌐 **Aplicación Desplegada**
+
+**¡La aplicación está funcionando en Streamlit Cloud!**
+
+🔗 **Enlace de la aplicación:** [https://mathstudentgradedeployapp-wfdbf9xz5ma8v8pmfhwb2m.streamlit.app/](https://mathstudentgradedeployapp-wfdbf9xz5ma8v8pmfhwb2m.streamlit.app/)
+
 ## 🚀 Características
 
 - **Interfaz moderna**: Diseño limpio y responsive con Streamlit
@@ -9,28 +15,29 @@ Esta es la versión Streamlit de la aplicación de predicción de calificaciones
 - **Información detallada**: Sidebar con información del modelo y variables utilizadas
 - **Validación de datos**: Verificación automática de rangos y tipos de datos
 - **Métricas visuales**: Presentación clara de resultados con métricas y gráficos
+- **Despliegue en la nube**: Aplicación accesible desde cualquier dispositivo
 
 ## 📋 Requisitos
 
 - Python 3.8 o superior
 - Streamlit 1.28.0 o superior
-- Las dependencias listadas en `requirements_streamlit.txt`
+- Las dependencias listadas en `requirements.txt`
 
-## 🛠️ Instalación
+## 🛠️ Instalación Local
 
-1. **Clonar el repositorio** (si no lo has hecho ya):
+1. **Clonar el repositorio**:
 ```bash
-git clone <tu-repositorio>
-cd formulario-educativo
+git clone https://github.com/Aiadevop/math_student_grade_deploy_streamlit.git
+cd math_student_grade_deploy_streamlit
 ```
 
 2. **Instalar dependencias**:
 ```bash
-pip install -r requirements_streamlit.txt
+pip install -r requirements.txt
 ```
 
 3. **Verificar que el modelo esté disponible**:
-   - El archivo `app/models/lin_reg_model_opt.pkl` debe estar presente
+   - El archivo `models/lin_reg_model_opt.pkl` debe estar presente
 
 ## 🚀 Ejecución Local
 
@@ -44,55 +51,29 @@ La aplicación se abrirá automáticamente en tu navegador en `http://localhost:
 
 ## ☁️ Despliegue en Streamlit Cloud
 
-### Opción 1: Streamlit Cloud (Recomendado)
+### ✅ **Aplicación ya desplegada**
 
-1. **Crear cuenta en Streamlit Cloud**:
-   - Ve a [share.streamlit.io](https://share.streamlit.io)
-   - Conecta tu cuenta de GitHub
+La aplicación está actualmente desplegada en Streamlit Cloud con la siguiente configuración:
 
-2. **Desplegar la aplicación**:
-   - Haz clic en "New app"
-   - Selecciona tu repositorio
-   - Establece:
-     - **Main file path**: `streamlit_app.py`
-     - **Python version**: 3.9 o superior
+- **Repositorio:** [Aiadevop/math_student_grade_deploy_streamlit](https://github.com/Aiadevop/math_student_grade_deploy_streamlit)
+- **Archivo principal:** `streamlit_app.py`
+- **Versión de Python:** 3.8
+- **Archivo de dependencias:** `requirements.txt`
 
-3. **Configurar variables de entorno** (si es necesario):
-   - En la configuración de la app, puedes agregar variables de entorno
+### 🔧 **Configuración utilizada**
 
-### Opción 2: Heroku
+Los siguientes archivos están configurados para el despliegue:
 
-1. **Crear archivo `Procfile`**:
-```
-web: streamlit run streamlit_app.py --server.port=$PORT --server.address=0.0.0.0
-```
-
-2. **Crear archivo `setup.sh`**:
-```bash
-mkdir -p ~/.streamlit/
-echo "\
-[general]\n\
-email = \"tu-email@ejemplo.com\"\n\
-" > ~/.streamlit/credentials.toml
-echo "\
-[server]\n\
-headless = true\n\
-enableCORS=false\n\
-port = $PORT\n\
-" > ~/.streamlit/config.toml
-```
-
-3. **Desplegar en Heroku**:
-```bash
-heroku create tu-app-nombre
-git add .
-git commit -m "Agregar versión Streamlit"
-git push heroku main
-```
+- **`requirements.txt`** - Dependencias de Python
+- **`runtime.txt`** - Versión de Python (3.8)
+- **`.streamlit/config.toml`** - Configuración de Streamlit
 
 ## 📊 Uso de la Aplicación
 
-1. **Llenar el formulario**:
+1. **Acceder a la aplicación**:
+   - Ve a: [https://mathstudentgradedeployapp-wfdbf9xz5ma8v8pmfhwb2m.streamlit.app/](https://mathstudentgradedeployapp-wfdbf9xz5ma8v8pmfhwb2m.streamlit.app/)
+
+2. **Llenar el formulario**:
    - Ingresa las puntuaciones de lectura y escritura (0-100)
    - Selecciona el género del estudiante
    - Elige el tipo de almuerzo
@@ -100,7 +81,7 @@ git push heroku main
    - Selecciona el grupo étnico
    - Especifica el nivel educativo de los padres
 
-2. **Obtener predicción**:
+3. **Obtener predicción**:
    - Haz clic en "🔮 Predecir Calificación Matemática"
    - La aplicación mostrará:
      - Calificación matemática predicha (0-100)
@@ -108,69 +89,65 @@ git push heroku main
      - Número de variables utilizadas
      - Resumen de los datos ingresados
 
-## 🔧 Configuración
+## 🔧 Configuración del Proyecto
 
-### Archivo de configuración Streamlit
+### Archivos de configuración
 
-El archivo `.streamlit/config.toml` contiene la configuración personalizada:
+- **`requirements.txt`** - Dependencias principales del proyecto
+- **`runtime.txt`** - Versión de Python para despliegue
+- **`.streamlit/config.toml`** - Configuración específica de Streamlit
 
-- **Tema**: Colores personalizados para la aplicación
-- **Servidor**: Configuración para despliegue
-- **Navegador**: Configuración de estadísticas de uso
+### Estructura del proyecto
 
-### Personalización
+```
+formulario-educativo-streamlit/
+├── streamlit_app.py          # Aplicación principal
+├── requirements.txt          # Dependencias
+├── runtime.txt              # Versión de Python
+├── models/
+│   └── lin_reg_model_opt.pkl # Modelo entrenado
+├── .streamlit/
+│   └── config.toml          # Configuración de Streamlit
+└── README.md                # Este archivo
+```
 
-Puedes personalizar la aplicación modificando:
+## 📈 Características del Modelo
 
-- **Colores**: Edita los valores en `config.toml`
-- **CSS**: Modifica el CSS embebido en `streamlit_app.py`
-- **Funcionalidad**: Agrega nuevas características en la función `main()`
+- **Tipo:** Regresión Lineal Optimizada
+- **Precisión:** 87.2% (R² = 0.872)
+- **Variables de entrada:** 7
+- **Escala de calificaciones:** 0-100
 
-## 📈 Ventajas de Streamlit
-
-- **Desarrollo rápido**: Interfaz web con pocas líneas de código
-- **Interactividad**: Widgets nativos y actualizaciones en tiempo real
-- **Despliegue fácil**: Integración directa con Streamlit Cloud
-- **Responsive**: Se adapta automáticamente a diferentes dispositivos
-- **Comunidad activa**: Gran soporte y documentación
-
-## 🔍 Diferencias con la versión Flask
-
-| Característica | Flask | Streamlit |
-|----------------|-------|-----------|
-| **Interfaz** | HTML/CSS/JS personalizado | Widgets nativos |
-| **Desarrollo** | Más código, más control | Menos código, más rápido |
-| **Despliegue** | Más configuraciones | Más simple |
-| **Interactividad** | JavaScript personalizado | Reactiva automática |
-| **Mantenimiento** | Más complejo | Más simple |
+### Variables utilizadas:
+1. Género (Femenino/Masculino)
+2. Tipo de almuerzo (Estándar/Gratuito)
+3. Curso de preparación (Sí/No)
+4. Puntuación de lectura (0-100)
+5. Puntuación de escritura (0-100)
+6. Grupo étnico E (Sí/No)
+7. Nivel educativo padres (Secundaria/Otro)
 
 ## 🐛 Solución de Problemas
 
 ### Error: "No se pudo cargar el modelo"
-
-1. Verifica que el archivo `lin_reg_model_opt.pkl` esté en la ubicación correcta
-2. Asegúrate de que el archivo no esté corrupto
-3. Revisa los permisos del archivo
+- Verifica que el archivo `models/lin_reg_model_opt.pkl` esté presente
+- Asegúrate de que las dependencias estén instaladas correctamente
 
 ### Error: "ModuleNotFoundError"
-
-1. Instala todas las dependencias: `pip install -r requirements_streamlit.txt`
-2. Verifica que estés usando la versión correcta de Python
+- Instala las dependencias: `pip install -r requirements.txt`
+- Verifica que estés usando Python 3.8 o superior
 
 ### Error en Streamlit Cloud
-
-1. Verifica que el archivo principal sea `streamlit_app.py`
-2. Asegúrate de que todas las dependencias estén en `requirements_streamlit.txt`
-3. Revisa los logs de despliegue en Streamlit Cloud
+- La aplicación está configurada correctamente para Streamlit Cloud
+- Si hay problemas, verifica los logs en la configuración de la app
 
 ## 📞 Soporte
 
 Si tienes problemas con la aplicación:
 
-1. Revisa los logs de error en la consola
-2. Verifica que todas las dependencias estén instaladas
-3. Asegúrate de que el modelo esté disponible
-4. Consulta la documentación de Streamlit: [docs.streamlit.io](https://docs.streamlit.io)
+1. **Aplicación desplegada:** Revisa si funciona en el enlace proporcionado
+2. **Ejecución local:** Verifica que todas las dependencias estén instaladas
+3. **Documentación:** Consulta la documentación de Streamlit: [docs.streamlit.io](https://docs.streamlit.io)
 
 ## 🎯 Próximas Mejoras
 
@@ -179,8 +156,12 @@ Si tienes problemas con la aplicación:
 - [ ] Agregar exportación de resultados
 - [ ] Incluir más modelos de machine learning
 - [ ] Agregar autenticación de usuarios
+- [ ] Implementar historial de predicciones
 
----
+## 🌟 **¡Aplicación Funcionando!**
 
-¡Disfruta usando tu aplicación de predicción de calificaciones matemáticas con Streamlit! 🎉
+La aplicación está **completamente operativa** y disponible en:
+**https://mathstudentgradedeployapp-wfdbf9xz5ma8v8pmfhwb2m.streamlit.app/**
+
+¡Disfruta usando tu aplicación de predicción de calificaciones matemáticas! 🎉
 
