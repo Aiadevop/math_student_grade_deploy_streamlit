@@ -21,6 +21,16 @@ except ImportError:
     JOBLIB_AVAILABLE = False
     st.warning("⚠️ joblib no disponible, usando pickle")
 
+# Verificar que scikit-learn esté disponible
+try:
+    import sklearn
+    SKLEARN_AVAILABLE = True
+    st.success(f"✅ scikit-learn disponible - versión: {sklearn.__version__}")
+except ImportError:
+    SKLEARN_AVAILABLE = False
+    st.error("❌ scikit-learn no está disponible. Por favor, instala scikit-learn: pip install scikit-learn")
+    st.info("🔧 En Streamlit Cloud, esto puede indicar un problema con la instalación de dependencias")
+
 # Configuración de la página
 st.set_page_config(
     page_title="📊 Predicción de Calificaciones Matemáticas",
@@ -81,6 +91,11 @@ def cargar_modelo():
     """
     Cargar el modelo entrenado lin_reg_model_opt
     """
+    # Verificar que scikit-learn esté disponible
+    if not SKLEARN_AVAILABLE:
+        st.error("❌ scikit-learn no está disponible. No se puede cargar el modelo.")
+        return None, None
+    
     try:
         # Buscar el archivo del modelo en diferentes ubicaciones posibles
         posibles_rutas = [
@@ -100,6 +115,8 @@ def cargar_modelo():
         for ruta in posibles_rutas:
             if Path(ruta).exists():
                 st.info(f"🔍 Intentando cargar modelo desde: {ruta}")
+                st.info(f"📦 scikit-learn disponible: {SKLEARN_AVAILABLE}")
+                st.info(f"📦 joblib disponible: {JOBLIB_AVAILABLE}")
                 try:
                     # Intentar primero con joblib si está disponible
                     if JOBLIB_AVAILABLE:
@@ -220,6 +237,11 @@ def main():
     """
     Función principal de la aplicación Streamlit
     """
+    # Información de depuración
+    st.sidebar.header("🔧 Información de Depuración")
+    st.sidebar.info(f"📦 scikit-learn: {SKLEARN_AVAILABLE}")
+    st.sidebar.info(f"📦 joblib: {JOBLIB_AVAILABLE}")
+    
     # Título principal
     st.markdown('<h1 class="main-header">📊 Predicción de Calificaciones Matemáticas</h1>', unsafe_allow_html=True)
     
