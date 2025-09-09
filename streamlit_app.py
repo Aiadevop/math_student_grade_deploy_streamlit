@@ -295,12 +295,12 @@ def main():
                 st.write(f"**{key}:** {value}")
             
             # Mostrar DataFrame validado
-            st.subheader("📊 Datos Validados (DataFrame)")
-            with st.expander("👁️ Ver DataFrame validado"):
-                st.dataframe(df_validado)
-                st.info(f"📈 DataFrame con {len(df_validado)} fila(s) y {len(df_validado.columns)} columna(s)")
+            # st.subheader("📊 Datos Validados (DataFrame)")
+            # with st.expander("👁️ Ver DataFrame validado"):
+            #     st.dataframe(df_validado)
+            #     st.info(f"📈 DataFrame con {len(df_validado)} fila(s) y {len(df_validado.columns)} columna(s)")
             
-            st.markdown('</div>', unsafe_allow_html=True)
+            # st.markdown('</div>', unsafe_allow_html=True)
             
         except Exception as e:
             st.error(f"❌ Error al realizar la predicción: {str(e)}")
