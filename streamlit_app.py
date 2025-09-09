@@ -125,6 +125,7 @@ def main():
     
     # Botón para cargar datos desde URL
     datos_desde_url = None
+    df_con_predicciones = None
     if st.button("📥 Cargar datos desde URL", disabled=not url_datos):
         try:
             with st.spinner("Cargando datos desde URL..."):
@@ -133,9 +134,41 @@ def main():
                 st.success(f"✅ {mensaje}")
                 st.info(f"📊 Se cargaron {len(df)} filas de datos")
                 
+                # Hacer predicciones para todas las filas
+                with st.spinner("🔮 Generando predicciones para todas las filas..."):
+                    predicciones = []
+                    for i in range(len(df)):
+                        # Procesar cada fila individualmente
+                        fila_df = df.iloc[[i]]  # DataFrame con una sola fila
+                        datos_fila = procesar_datos_desde_dataframe(fila_df)
+                        datos_validados, _ = validar_datos(datos_fila)
+                        resultado = hacer_prediccion(datos_validados, modelo)
+                        predicciones.append(resultado['math_score'])
+                    
+                    # Crear DataFrame con predicciones
+                    df_con_predicciones = df.copy()
+                    df_con_predicciones['math_score_predicted'] = predicciones
+                
+                st.success(f"🎯 Predicciones generadas para {len(predicciones)} filas")
+                
                 # Mostrar preview de los datos cargados
-                with st.expander("👁️ Ver datos cargados"):
+                with st.expander("👁️ Ver datos cargados originales"):
                     st.dataframe(df.head())
+                
+                # Mostrar DataFrame con predicciones
+                with st.expander("🔮 Ver datos con predicciones de math_score"):
+                    st.dataframe(df_con_predicciones)
+                    st.info(f"📈 DataFrame con {len(df_con_predicciones)} filas y {len(df_con_predicciones.columns)} columnas (incluyendo math_score_predicted)")
+                    
+                    # Botón para descargar el DataFrame con predicciones
+                    csv_data = df_con_predicciones.to_csv(index=False)
+                    st.download_button(
+                        label="📥 Descargar DataFrame con predicciones (CSV)",
+                        data=csv_data,
+                        file_name="datos_con_predicciones_math_score.csv",
+                        mime="text/csv",
+                        help="Descarga el DataFrame completo con las predicciones de math_score"
+                    )
                     
         except Exception as e:
             st.error(f"❌ Error al cargar datos: {str(e)}")

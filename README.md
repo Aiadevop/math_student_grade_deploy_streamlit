@@ -15,6 +15,8 @@ Esta es la versión Streamlit de la aplicación de predicción de calificaciones
 - **Información detallada**: Sidebar con información del modelo y variables utilizadas
 - **Validación de datos**: Verificación automática de rangos y tipos de datos
 - **Métricas visuales**: Presentación clara de resultados con métricas y gráficos
+- **Carga desde URL (CSV)**: Procesa un CSV remoto y genera predicciones para todas las filas
+- **Descarga de resultados**: Exporta el DataFrame con la columna `math_score_predicted` en CSV
 - **Despliegue en la nube**: Aplicación accesible desde cualquier dispositivo
 
 ## 📋 Requisitos
@@ -73,7 +75,14 @@ Los siguientes archivos están configurados para el despliegue:
 1. **Acceder a la aplicación**:
    - Ve a: [https://mathstudentgradedeployapp-wfdbf9xz5ma8v8pmfhwb2m.streamlit.app/](https://mathstudentgradedeployapp-wfdbf9xz5ma8v8pmfhwb2m.streamlit.app/)
 
-2. **Llenar el formulario**:
+2. **Cargar datos desde URL (opcional)**:
+   - Proporciona un enlace a un archivo `.csv` y pulsa "Cargar"
+   - La app procesará cada fila, generará `math_score_predicted` y mostrará:
+     - Vista de los datos originales
+     - Vista de los datos con la columna `math_score_predicted`
+     - Botón para descargar el CSV con predicciones
+
+3. **Llenar el formulario** (si no usas URL):
    - Ingresa las puntuaciones de lectura y escritura (0-100)
    - Selecciona el género del estudiante
    - Elige el tipo de almuerzo
@@ -81,7 +90,7 @@ Los siguientes archivos están configurados para el despliegue:
    - Selecciona el grupo étnico
    - Especifica el nivel educativo de los padres
 
-3. **Obtener predicción**:
+4. **Obtener predicción**:
    - Haz clic en "🔮 Predecir Calificación Matemática"
    - La aplicación mostrará:
      - Calificación matemática predicha (0-100)
@@ -106,6 +115,10 @@ formulario-educativo-streamlit/
 ├── runtime.txt              # Versión de Python
 ├── models/
 │   └── lin_reg_model_opt.pkl # Modelo entrenado
+├── src/                      # Código fuente (procesado de datos y modelo)
+│   ├── data.py               # Carga desde URL y procesamiento de DataFrame
+│   ├── model.py              # Carga del modelo y predicción
+│   └── __init__.py
 ├── .streamlit/
 │   └── config.toml          # Configuración de Streamlit
 └── README.md                # Este archivo
@@ -140,6 +153,10 @@ formulario-educativo-streamlit/
 ### Error en Streamlit Cloud
 - La aplicación está configurada correctamente para Streamlit Cloud
 - Si hay problemas, verifica los logs en la configuración de la app
+
+### Predicciones desde URL no aparecen
+- Asegúrate de que la URL termine en `.csv`
+- El archivo debe incluir columnas equivalentes a: `reading_score`, `writing_score`, `gender`, `lunch`, `test_preparation_course`, `race_ethnicity_group_E`, `parental_level_of_education_high_school`. La app admite nombres alternativos comunes (ver `src/data.py`).
 
 ## 📞 Soporte
 
